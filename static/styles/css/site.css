@@ -1,0 +1,129 @@
+@font-face {
+    font-family: 'my-font';
+    src: url(../../fonts/Jura-Regular.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'my-bold-font';
+    src: url(../../fonts/Jura-DemiBold.ttf) format('truetype');
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+/* Стили для заголовков */
+h1 {
+    text-align: center;
+    font-family: 'my-bold-font';
+    font-size: 30px;
+    background: linear-gradient(
+        to right,
+        lime 25%,
+        green 50%,
+        lime 75%,
+        green 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-fill-color: transparent;
+    background-size: 500% auto;
+    animation: textShine 2s ease-in-out infinite alternate;
+    padding-bottom: 20px;
+    padding-top: 20px
+}
+@keyframes textShine {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 100% 50%;
+    }
+}
+
+.section-image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    width: 70vw;
+    pointer-events: none;
+    user-select: none;
+    border-radius: 10px;
+}
+
+/* Стили для ссылок */
+nav > a {
+    font-family: my-bold-font;
+    font-size: 25px;
+    color: lime;
+    text-decoration: none;
+}
+
+nav {
+    text-align: right;
+}
+
+header {
+    background-color: #343434;
+    border-bottom: 1px solid #414141;
+}
+
+header > img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+main {
+    background-color: #202020;
+    padding-bottom: 1px;
+}
+
+footer {
+    background-color: #343434;
+    border-top: 1px solid #414141;
+}
+
+.blink:hover {
+  animation: blinker 0.5s linear infinite;
+}
+@keyframes blinker {
+    0% { color: lime; }
+    50% { color: green; }
+    100% { color: lime; }
+}
+
+.footer-links {
+    color: lime;
+    text-decoration: none;
+}
+
+.shadow-image-inset {
+    box-shadow: inset 20px 20px 40px 40px rgba(32, 32, 32, 1);
+}
+
+#logo {
+    margin-left: 20px;
+    margin-top: 20px;
+}
+
+li > a > img {
+    width: 50vw;
+}
+
+#signup {
+    border-radius: 15px;
+    font-family: my-bold-font;
+    background-color: #343434;
+    border: 1px solid #414141;
+    color: lime;
+    font-size: 20px;
+    padding: 10px 20px 10px 20px;
+    text-align: center;
+    margin-top: 100px;
+    margin-bottom: 100px;
+    text-decoration: none;
+}
+

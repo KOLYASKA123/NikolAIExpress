@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" style="scroll-behavior: smooth;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href={% static 'img/favicon.ico' %} type="image/x-icon">
+    <link rel="shortcut icon" href={% static 'img/favicon.ico' %} type="image/x-icon">
+    {% block head %}
+    {% endblock %}
+</head>
+<body>
+<header>
+    <a href="{% url 'main' %}">
+        <img id="logo" src={% static 'img/img.png' %}>
+    </a>
+    <nav>
+        <a>Категории</a>
+        <a></a>
+        <a>Заказы</a>
+        <a>Корзина</a>
+        {% if user.is_authenticated %}
+            <a>Профиль</a>
+            <a href={% url 'logout' %}>Выйти</a>
+        {% else %}
+            <a href={% url 'login' %}>Войти</a>
+        {% endif %}
+    </nav>
+</header>
+<main>
+    {% block content %}
+    {% endblock %}
+</main>
+<footer>
+    <a class="footer-links blink" href={% url 'about' %}>О NikolAIExpress</a>
+    <a class="footer-links blink" href={% url 'partners' %}>Полезные ресурсы</a>
+    <a class="footer-links blink" href={% url 'feedback' %}>Обратная связь</a>
+</footer>
+</body>
+</html>

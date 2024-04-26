@@ -1,0 +1,28 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block head %}
+    <title>Полезные ресурсы</title>
+    <link rel="stylesheet" href={% static 'styles/css/site.css' %}>
+{% endblock %}
+{% block content %}
+    <section>
+        <h1>Полезные ресурсы</h1>
+        <ul>
+            <li>
+                <a href="https://www.amazon.com">
+                    <img src={% static 'img/Amazon.png' %}>
+                </a>
+            </li>
+            <li>
+                <a href="https://msi-store.ru">
+                    <img src={% static 'img/msi.png' %}>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.dns-shop.ru">
+                    <img src={% static 'img/dns.png' %}>
+                </a>
+            </li>
+        </ul>
+    </section>
+{% endblock %}

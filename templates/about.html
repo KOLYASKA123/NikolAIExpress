@@ -1,0 +1,36 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block head %}
+    <title>О NikolAIExpress</title>
+    <link rel="stylesheet" href={% static 'styles/css/site.css' %}>
+{% endblock %}
+{% block content %}
+    <h1>Добро пожаловать на NikolAIExpress!</h1>
+    <section id="about-us">
+        <h1>
+            NikolAIExpress - это место, где вы можете найти все необходимое!
+            Мы предлагаем широкий ассортимент товаров и услуг для всех возрастов и интересов
+        </h1>
+        <img class="section-image" src={% static 'img/welcome.gif' %} alt="Изображение товара">
+    </section>
+    <section id="electrical-engineering">
+        <h1>
+            У нас вы можете найти технику на любой вкус и цвет без каких-либо ограничений на ввоз
+        </h1>
+        <img class="section-image" src={% static 'img/hacker.gif' %}>
+    </section>
+    <section id="all-sorts-of-things">
+        <h1>Быстрая доставка, товары на все случаи жизни для всех</h1>
+        <img class="section-image" src={% static 'img/fast.gif' %}>
+    </section>
+    <section id="final">
+        <h1>Присоединяйтесь к нам и найдите то, что искали!</h1>
+        <img class="section-image" src={% static 'img/final.gif' %}>
+    </section>
+    <div style="text-align: center; margin: 100px;">
+        <a href id="signup">
+            Присоединиться
+        </a>
+    </div>
+    <script src={% static 'styles/js/fade_sections.js' %}></script>
+{% endblock %}

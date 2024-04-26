@@ -1,0 +1,79 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block head %}
+    <title>Обратная связь</title>
+    <link rel="stylesheet" href={% static 'styles/css/site.css' %}>
+{% endblock %}
+{% block content %}
+    {% if form != None %}
+        <br><h1>Отправьте, пожалуйста заполненную анкету</h1><br>
+        <div>
+            <form method="post">
+                {% csrf_token %}
+                <label for="{{ form.name.id_for_label }}">{{ form.name.label }}:</label>
+                {{ form.name }}<br><br>
+                <label for="{{ form.city.id_for_label }}">{{ form.city.label }}:</label>
+                {{ form.city }}<br>
+                <label for="{{ form.gender.id_for_label }}">{{ form.gender.label }}:</label
+                {{ form.gender }}
+                <label for="{{ form.job.id_for_label }}">{{ form.job.label }}:</label><br>
+                {{ form.job }}<br><br>
+                <label for="{{ form.internet.id_for_label }}">{{ form.internet.label }}:</label><br>
+                {{ form.internet }}<br><br>
+                <label for="{{ form.notice.id_for_label }}">{{ form.notice.label }}:</label>
+                {{ form.notice }}<br><br>
+                <label for="{{ form.email.id_for_label }}}">{{ form.email.label }}:</label>
+                {{ form.email }}<br><br>
+                <label for="{{ form.message.id_for_label }}">{{ form.message.label }}:</label><br>
+                {{ form.message }}<br><br>
+                <input id="send-button" type="submit" value="Отправить">
+            </form>
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    // Получаем кнопку отправки формы
+                    let submitButton = document.querySelector('input[type="submit"]');
+
+                    // Добавляем обработчики событий для кнопки отправки формы
+                    submitButton.addEventListener('mouseover', () => {
+                        submitButton.style.backgroundColor = 'green' 
+                        submitButton.style.color = 'red'; // Изменяем цвет текста кнопки при наведении
+                    });
+
+                    submitButton.addEventListener('mouseout', () => {
+                        submitButton.style.color = ''; // Восстанавливаем исходный цвет текста кнопки при уходе курсора мыши
+                        submitButton.style.backgroundColor = '';
+                    });
+
+                    // Получаем все поля ввода формы
+                    let inputFields = document.querySelectorAll('input[type="text"], input[type="email"], textarea');
+
+                    // Добавляем обработчики событий для полей ввода формы
+                    for (let inputField of inputFields) {
+                        inputField.addEventListener('focus', () => {
+                            inputField.style.backgroundColor = 'lime'; // Изменяем цвет фона поля ввода при выборе для ввода
+                        });
+
+                        inputField.addEventListener('blur', () => {
+                            inputField.style.backgroundColor = ''; // Восстанавливаем исходный цвет фона поля ввода при потере фокуса
+                        });
+                    }
+                });
+            </script>
+        </div>
+    {% else %}
+        <br><h1>Благодарим за предоставленную информацию!</h1>
+        <h1>Вы сообщили о себе следующее:</h1>
+        <ul>
+            <li><span>Имя:</span> {{ data.name }}</li>
+            <li><span>Город:</span> {{ data.city }}</li>
+            <li><span>Пол:</span> {{ data.gender}}</li>
+            <li><span>Работа:</span> {{ data.job }}</li>
+            <li><span>Пользуетесь интернетом:</span> {{ data.internet }}</li>
+            <li><span>Получать новости сайта на e-mail:</span>
+                {{ data.notice }}
+            </li>
+            <li><span>Ваш e-mail:</span> {{ data.email }}</li>
+            <li><span>Информация о себе:</span> {{ data.message }}</li>
+        </ul>
+    {% endif %}
+{% endblock %}
