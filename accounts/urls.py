@@ -4,6 +4,11 @@ from . import views, forms
 
 urlpatterns = [
     path(
+        'registration/',
+        views.RegistrationView.as_view(),
+        name='registration'
+    ),
+    path(
         'login/',
         LoginView.as_view(
             template_name='registration/login.html',

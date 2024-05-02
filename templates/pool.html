@@ -3,65 +3,53 @@
 {% block head %}
     <title>Обратная связь</title>
     <link rel="stylesheet" href={% static 'styles/css/site.css' %}>
+    <link rel="stylesheet" href={% static 'styles/css/forms.css' %}>
 {% endblock %}
 {% block content %}
     {% if form != None %}
-        <br><h1>Отправьте, пожалуйста заполненную анкету</h1><br>
-        <div>
+        <div class="form-container">
+            <h1>Здесь вы можете оставить отзыв или описать проблему, с которой столкнулись</h1>
             <form method="post">
                 {% csrf_token %}
-                <label for="{{ form.name.id_for_label }}">{{ form.name.label }}:</label>
-                {{ form.name }}<br><br>
-                <label for="{{ form.city.id_for_label }}">{{ form.city.label }}:</label>
-                {{ form.city }}<br>
-                <label for="{{ form.gender.id_for_label }}">{{ form.gender.label }}:</label
-                {{ form.gender }}
-                <label for="{{ form.job.id_for_label }}">{{ form.job.label }}:</label><br>
-                {{ form.job }}<br><br>
-                <label for="{{ form.internet.id_for_label }}">{{ form.internet.label }}:</label><br>
-                {{ form.internet }}<br><br>
-                <label for="{{ form.notice.id_for_label }}">{{ form.notice.label }}:</label>
-                {{ form.notice }}<br><br>
-                <label for="{{ form.email.id_for_label }}}">{{ form.email.label }}:</label>
-                {{ form.email }}<br><br>
-                <label for="{{ form.message.id_for_label }}">{{ form.message.label }}:</label><br>
-                {{ form.message }}<br><br>
-                <input id="send-button" type="submit" value="Отправить">
+                {% for field in form %}
+                    <div class="form-group">
+                        {{ field }}
+                        {% if field.errors %}
+                            <ul class="errors">
+                                {% for error in field.errors %}
+                                  <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                <button type="submit">Submit</button>
             </form>
-            <script>
-                document.addEventListener('DOMContentLoaded', () => {
-                    // Получаем кнопку отправки формы
-                    let submitButton = document.querySelector('input[type="submit"]');
-
-                    // Добавляем обработчики событий для кнопки отправки формы
-                    submitButton.addEventListener('mouseover', () => {
-                        submitButton.style.backgroundColor = 'green' 
-                        submitButton.style.color = 'red'; // Изменяем цвет текста кнопки при наведении
-                    });
-
-                    submitButton.addEventListener('mouseout', () => {
-                        submitButton.style.color = ''; // Восстанавливаем исходный цвет текста кнопки при уходе курсора мыши
-                        submitButton.style.backgroundColor = '';
-                    });
-
-                    // Получаем все поля ввода формы
-                    let inputFields = document.querySelectorAll('input[type="text"], input[type="email"], textarea');
-
-                    // Добавляем обработчики событий для полей ввода формы
-                    for (let inputField of inputFields) {
-                        inputField.addEventListener('focus', () => {
-                            inputField.style.backgroundColor = 'lime'; // Изменяем цвет фона поля ввода при выборе для ввода
-                        });
-
-                        inputField.addEventListener('blur', () => {
-                            inputField.style.backgroundColor = ''; // Восстанавливаем исходный цвет фона поля ввода при потере фокуса
-                        });
-                    }
-                });
-            </script>
         </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                let submitButton = document.querySelector('input[type="submit"]');
+                submitButton.addEventListener('mouseover', () => {
+                    submitButton.style.backgroundColor = 'green' 
+                    submitButton.style.color = 'red';
+                });
+                submitButton.addEventListener('mouseout', () => {
+                    submitButton.style.color = '';
+                    submitButton.style.backgroundColor = '';
+                });
+                let inputFields = document.querySelectorAll('input[type="text"], input[type="email"], textarea');
+                for (let inputField of inputFields) {
+                    inputField.addEventListener('focus', () => {
+                        inputField.style.backgroundColor = 'lime';
+                    });
+                    inputField.addEventListener('blur', () => {
+                        inputField.style.backgroundColor = '';
+                    });
+                }
+            });
+        </script>
     {% else %}
-        <br><h1>Благодарим за предоставленную информацию!</h1>
+        <h1>Благодарим за предоставленную информацию!</h1>
         <h1>Вы сообщили о себе следующее:</h1>
         <ul>
             <li><span>Имя:</span> {{ data.name }}</li>

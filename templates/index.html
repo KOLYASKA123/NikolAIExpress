@@ -20,8 +20,11 @@
         <a>Заказы</a>
         <a>Корзина</a>
         {% if user.is_authenticated %}
-            <a>Профиль</a>
-            <a href={% url 'logout' %}>Выйти</a>
+            <a>Профиль {{ user }}</a>
+            <form method="post" action={% url 'logout' %}>
+                {% csrf_token %}
+                <input id="send-button" type="submit" value="Выйти">
+            </form>
         {% else %}
             <a href={% url 'login' %}>Войти</a>
         {% endif %}
@@ -32,7 +35,7 @@
     {% endblock %}
 </main>
 <footer>
-    <a class="footer-links blink" href={% url 'about' %}>О NikolAIExpress</a>
+    <a class="footer-links blink" href={% url 'main' %}>О NikolAIExpress</a>
     <a class="footer-links blink" href={% url 'partners' %}>Полезные ресурсы</a>
     <a class="footer-links blink" href={% url 'feedback' %}>Обратная связь</a>
 </footer>

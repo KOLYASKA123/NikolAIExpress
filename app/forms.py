@@ -1,43 +1,39 @@
 from django import forms
+from .models import Feedbacks
 
 
 class FeedbackForm(forms.Form):
     name = forms.CharField(
-        label='Ваше имя',
         min_length=2,
         max_length=100,
         widget=forms.TextInput(
-            attrs={'class': 'outline'}
+            attrs={'class': 'outline', 'placeholder': 'Ваше имя'}
         )
     )
     city = forms.CharField(
-        label='Ваш город',
         min_length=2,
         max_length=100,
         widget=forms.TextInput(
-            attrs={'class': 'outline'}
+            attrs={'class': 'outline', 'placeholder': 'Ваш город'}
         )
     )
     job = forms.CharField(
-        label='Ваш род занятий',
         min_length=2,
         max_length=100,
         widget=forms.TextInput(
-            attrs={'class': 'outline'}
+            attrs={'class': 'outline', 'placeholder': 'Ваш род занятий'}
         )
     )
     gender = forms.ChoiceField(
-        label='Ваш пол',
         choices=[
             ('1', 'Мужской'),
             ('2', 'Женский')],
         widget=forms.RadioSelect(
-            attrs={'class': 'outline'}
+            attrs={'class': 'outline', 'placeholder': 'Ваш пол'}
         ),
         initial=1
     )
     internet = forms.ChoiceField(
-        label='Вы пользуетесь интернетом',
         choices=(
             ('1', 'Каждый день'),
             ('2', 'Несколько раз в день'),
@@ -46,30 +42,42 @@ class FeedbackForm(forms.Form):
         ),
         initial=1,
         widget=forms.Select(
-            attrs={'class': 'outline'}
+            attrs={'class': 'outline', 'placeholder': 'Вы пользуетесь интернетом'}
         )
     )
     notice = forms.BooleanField(
-        label='Получать новости сайта на e-mail?',
         initial=False,
         required=False,
         widget=forms.CheckboxInput(
-            attrs={'class': 'outline'}
+            attrs={'class': 'outline', 'placeholder': 'Получать новости сайта на e-mail?'}
         )
     )
     email = forms.EmailField(
-        label='Ваш e-mail',
         min_length=7,
         widget=forms.EmailInput(
-            attrs={'class': 'outline'}
+            attrs={'class': 'outline', 'placeholder': 'Ваш e-mail'}
         )
     )
     message = forms.CharField(
-        label='Коротко о себе',
         widget=forms.Textarea(
             attrs={
+                'class': 'outline',
                 'rows': 12,
-                'cols': 20
+                'cols': 20,
+                'placeholder': 'Коротко о себе'
+            }
+        )
+    )
+
+
+class ProductFeedbackForm(forms.Form):
+    text = forms.CharField(
+
+        max_length=500,
+        widget=forms.Textarea(
+            attrs={
+                'cols': 50, 'rows': 10,
+                'placeholder': 'Ваш отзыв',
             }
         )
     )

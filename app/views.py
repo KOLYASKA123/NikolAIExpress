@@ -1,10 +1,12 @@
-from django.shortcuts import render
-from django.views.generic import View
-from .forms import FeedbackForm
+from django.shortcuts import render, redirect
+from django.views.generic import View, ListView, DetailView, CreateView, DeleteView, UpdateView
+from .forms import FeedbackForm, ProductFeedbackForm
+from .models import Products, Feedbacks
+from django.utils import timezone
 # Create your views here.
 
 
-class FeedbackView(View):
+class GlobalFeedbackView(View):
 
     def post(self, request):
         data = None
@@ -36,3 +38,53 @@ class FeedbackView(View):
     def get(self, request):
         form = FeedbackForm()
         return render(self.request, 'pool.html', {'form': form})
+
+
+# class ProductCreateView(CreateView):
+#     model = Products
+#     template_name = 'product_form.html'
+#     fields = '__all__'
+#     success_url = '/products/'
+
+
+class ProductListView(ListView):
+    model = Products
+    template_name = 'product_list.html'
+    context_object_name = 'products'
+
+
+class ProductDetailView(DetailView):
+    model = Products
+    template_name = 'product_detail.html'
+    context_object_name = 'product'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = ProductFeedbackForm()
+        return context
+
+class ProductFeedbackView(View):
+    def post(self, request, pk):
+        product = Products.objects.get(id=pk)
+        form = ProductFeedbackForm(self.request.POST)
+        if form.is_valid():
+            Feedbacks.objects.create(
+                product=product,
+                user=self.request.user,
+                text=form.cleaned_data['text'],
+            )
+        return redirect('product', pk=pk)
+
+
+
+# class ProductUpdateView(UpdateView):
+#     model = Products
+#     template_name = 'product_form.html'
+#     fields = '__all__'
+#     success_url = '/products/'
+#
+#
+# class ProductDeleteView(DeleteView):
+#     model = Products
+#     template_name = 'product_form.html'
+#     success_url = '/products/'

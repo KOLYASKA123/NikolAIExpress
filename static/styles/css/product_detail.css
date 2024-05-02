@@ -1,0 +1,88 @@
+.blocks-style {
+    border-radius: 25px;
+    background-color: #272727;
+}
+
+.blocks-content {
+    display: block;
+    margin: 25px;
+}
+
+
+#hierarchy {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    text-align: center;
+}
+
+#images {
+    flex: 1;
+    margin-left: 10px;
+    margin-right: 5px;
+}
+
+#product-description {
+    flex: 1;
+    margin-left: 5px;
+    margin-right: 5px;
+    height: 50vh;
+    & > h2 {
+        margin-top: 10px;
+        padding-bottom: 10px;
+        text-align: center;
+        border-bottom: 5px solid #202020;
+    }
+}
+
+#price-and-ways-to-pay {
+    flex: 1;
+    margin-left: 5px;
+    margin-right: 10px;
+}
+
+#feedbacks {
+    padding: 1px;
+    margin: 10px;
+    width: 50vw;
+}
+
+#similar-products {
+
+}
+
+.image {
+
+}
+
+.feedback {
+    margin-bottom: 20px;
+}
+
+.feedback:last-child {
+    margin-bottom: 0;
+}
+
+#feedbacks > .blocks-content > form > textarea {
+    border-radius: 15px;
+    padding: 15px 25px;
+    margin-bottom: 20px;
+    background-color: #616161;
+    border: 1px solid #414141;
+    font-family: my-bold-font, serif;
+    color: lime;
+    font-size: 16px;
+    outline: none;
+}
+
+#feedbacks > .blocks-content > form > textarea:hover {
+    border: 1px solid lime;
+}
+
+#feedbacks > .blocks-content > form > textarea:focus {
+    border: 1px solid red;
+    background-color: #818181;
+}
+
+.similar-product {
+
+}

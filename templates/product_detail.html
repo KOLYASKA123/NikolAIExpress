@@ -1,0 +1,69 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block head %}
+	<title>Товары</title>
+    <link rel="stylesheet" href={% static 'styles/css/site.css' %}>
+    <link rel="stylesheet" href={% static 'styles/css/product_detail.css' %}>
+{% endblock %}
+{% block content %}
+    <h3 id="hierarchy">
+        <a>Назад</a> |
+        <a href={% url 'products' %}>Все товары</a> / 
+        <a>{{ product.category.parent }}</a> / 
+        <a>{{ product.category }}</a> / 
+        <a>{{ product.brand }}</a>
+    </h3>
+    <div style="display: flex">
+        <div id="images" class="blocks-style">
+            <div class="blocks-content">
+                
+            </div>
+        </div>
+	    <div id="product-description" class="blocks-style">
+            <div class="blocks-content">
+                <h2>{{ product.name }}</h2>
+                <p>
+                    {{ product.description }}<br>
+                    Дата последнего обновления товара: {{ product.date_updated }}<br>
+                    Дата создания товара: {{ product.date_created }}<br>
+                </p>
+            </div>
+        </div>
+        <div id="price-and-ways-to-pay" class="blocks-style">
+            <div class="blocks-content">
+                {{ product.price }} ₽
+            </div>
+        </div>
+    </div>
+    <div id="feedbacks" class="blocks-style">
+        <div class="blocks-content">
+            <h2>Отзывы | Вопросы</h2><br>
+            <form method="post" action={% url 'create_feedback' product.id %}>
+                {% csrf_token %}
+                {{ form.text }}
+                <br>
+                <button>Оставить отзыв</button>
+                <br>
+                <br>
+            </form>
+            {% for feedback in product.feedbacks.all %}
+                <div class="feedback">
+                    <h4>
+                        {{ feedback.user }} <br>
+                        {{ feedback.date_created }}
+                    </h4>
+                    <p>
+                        {{ feedback.text }}
+                    </p>
+{#                    {% if feedback.user == user %}#}
+{#                        <a href="">#}
+{#                            Изменить отзыв #}
+{#                        </a>#}
+{#                    {% endif %} #}
+                </div>
+            {% empty %}
+                <p>На данный товар пока что нет отзывов.</p>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

@@ -1,7 +1,7 @@
 {% extends 'index.html' %}
 {% load static %}
 {% block head %}
-    <title>О NikolAIExpress</title>
+    <title>Главная</title>
     <link rel="stylesheet" href={% static 'styles/css/site.css' %}>
 {% endblock %}
 {% block content %}
@@ -11,7 +11,7 @@
             NikolAIExpress - это место, где вы можете найти все необходимое!
             Мы предлагаем широкий ассортимент товаров и услуг для всех возрастов и интересов
         </h1>
-        <img class="section-image" src={% static 'img/welcome.gif' %} alt="Изображение товара">
+        <img class="section-image" src={% static 'img/welcome.gif' %}>
     </section>
     <section id="electrical-engineering">
         <h1>
@@ -27,8 +27,8 @@
         <h1>Присоединяйтесь к нам и найдите то, что искали!</h1>
         <img class="section-image" src={% static 'img/final.gif' %}>
     </section>
-    <div style="text-align: center; margin: 100px;">
-        <a href id="signup">
+    <div style="text-align: center; margin-top: 100px; margin-bottom: 100px">
+        <a href={% url 'registration' %} id="signup">
             Присоединиться
         </a>
     </div>

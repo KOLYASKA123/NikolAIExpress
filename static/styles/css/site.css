@@ -13,6 +13,16 @@
     padding: 0;
 }
 
+body {
+    font-family: my-bold-font;
+    color: lime;
+}
+
+a {
+    color: lime;
+    text-decoration: none;
+}
+
 /* Стили для заголовков */
 h1 {
     text-align: center;
@@ -69,6 +79,7 @@ nav {
 header {
     background-color: #343434;
     border-bottom: 1px solid #414141;
+    height: 10vh;
 }
 
 header > img {
@@ -79,11 +90,13 @@ header > img {
 main {
     background-color: #202020;
     padding-bottom: 1px;
+    min-height: 80vh;
 }
 
 footer {
     background-color: #343434;
     border-top: 1px solid #414141;
+    height: 10vh;
 }
 
 .blink:hover {

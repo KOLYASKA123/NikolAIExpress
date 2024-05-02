@@ -1,0 +1,40 @@
+.form-container {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    overflow: auto;
+}
+
+.form-group > input[type="text"],
+.form-group > input[type="email"],
+.form-group > input[type="password"],
+.form-group > textarea {
+    border-radius: 15px;
+    padding: 15px 25px;
+    margin-bottom: 20px;
+    background-color: #616161;
+    border: 1px solid #414141;
+    font-family: my-bold-font, serif;
+    color: lime;
+    font-size: 16px;
+    outline: none;
+}
+
+.form-group > input[type="text"]:hover,
+.form-group > input[type="email"]:hover,
+.form-group > input[type="password"]:hover,
+.form-group > textarea:hover {
+    border: 1px solid lime;
+}
+
+.form-group > input[type="text"]:focus,
+.form-group > input[type="email"]:focus,
+.form-group > input[type="password"]:focus,
+.form-group > textarea:focus {
+    border: 1px solid red;
+    background-color: #818181;
+}
+

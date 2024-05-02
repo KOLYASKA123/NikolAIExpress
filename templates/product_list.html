@@ -1,0 +1,21 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block head %}
+	<title>Товары</title>
+    <link rel="stylesheet" href={% static 'styles/css/site.css' %}>
+    <link rel="stylesheet" href={% static 'styles/css/product_list.css' %}>
+{% endblock %}
+{% block content %}
+    <div id="cards-container">
+	    {% for product in products %}
+            <a href="{{ product.get_absolute_url }}">
+	    	    <div class="card">
+                    <div>{{ product.price }} ₽</div>
+                    <div>{{ product.brand }} / {{ product }}</div>
+                </div>
+            </a>
+	    {% empty %}
+	    	<p>Нет товаров</p>
+	    {% endfor %}
+    </div>
+{% endblock %}

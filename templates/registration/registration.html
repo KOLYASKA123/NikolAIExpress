@@ -1,14 +1,14 @@
 {% extends 'index.html' %}
 {% load static %}
 {% block head %}
-    <title>Вход</title>
+    <title>Регистрация</title>
     <link rel="stylesheet" href={% static 'styles/css/site.css' %}>
     <link rel="stylesheet" href={% static 'styles/css/forms.css' %}>
 {% endblock %}
 {% block content %}
     <div class="form-container">
-        <h1>Вход в аккаунт</h1>
-        <form method="post" action={% url 'login' %}>
+    <h1>Регистрация пользователя</h1>
+        <form method="post" action={% url 'registration' %}>
             {% csrf_token %}
             {% for field in form %}
                 <div class="form-group">
@@ -22,11 +22,11 @@
                     {% endif %}
                 </div>
             {% endfor %}
-            <a href={% url 'registration' %}>У меня нет аккаунта</a><br>
+            <a href={% url 'login' %}>У меня есть аккаунт</a><br>
             <input 
-                    id="send-button" 
+                    id="send-button"
                     type="submit" 
-                    value="Отправить"
+                    value="Зарегистрироваться"
             >
         </form>
     </div>
