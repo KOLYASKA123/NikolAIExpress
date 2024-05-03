@@ -1,5 +1,5 @@
 from django import forms
-from .models import Feedbacks
+from .models import Feedbacks, Products, Categories, SubCategories, Brands
 
 
 class FeedbackForm(forms.Form):
@@ -25,6 +25,7 @@ class FeedbackForm(forms.Form):
         )
     )
     gender = forms.ChoiceField(
+        label = 'Ваш пол',
         choices=[
             ('1', 'Мужской'),
             ('2', 'Женский')],
@@ -34,18 +35,21 @@ class FeedbackForm(forms.Form):
         initial=1
     )
     internet = forms.ChoiceField(
+        label='Вы совершаете покупки в интернете',
         choices=(
             ('1', 'Каждый день'),
             ('2', 'Несколько раз в день'),
             ('3', 'Несколько раз в неделю'),
-            ('4', 'Несколько раз в месяц')
+            ('4', 'Несколько раз в месяц'),
+            ('5', 'Ещё реже')
         ),
         initial=1,
         widget=forms.Select(
-            attrs={'class': 'outline', 'placeholder': 'Вы пользуетесь интернетом'}
+            attrs={'class': 'outline', 'placeholder': 'Вы совершаете покупки в интернете'}
         )
     )
     notice = forms.BooleanField(
+        label='Получать новости сайта на e-mail',
         initial=False,
         required=False,
         widget=forms.CheckboxInput(
@@ -64,7 +68,7 @@ class FeedbackForm(forms.Form):
                 'class': 'outline',
                 'rows': 12,
                 'cols': 20,
-                'placeholder': 'Коротко о себе'
+                'placeholder': 'Ващ отзыв или проблема, с которой вы столкнулись'
             }
         )
     )
@@ -81,3 +85,57 @@ class ProductFeedbackForm(forms.Form):
             }
         )
     )
+
+
+class MultipleFileInput(forms.ClearableFileInput):
+    template_name = 'widgets/multiple_file_input.html'
+
+    def value_from_datadict(self, data, files, name):
+        upload = super().value_from_datadict(data, files, name)
+        if not upload:
+            return None
+        return [item for item in upload if item]
+
+
+class ProductForm(forms.ModelForm):
+    name = forms.CharField(
+        widget=forms.TextInput(
+            attrs={'placeholder': 'Название'}
+        )
+    )
+    description = forms.CharField(
+        widget=forms.Textarea(
+            attrs={'placeholder': 'Описание'}
+        )
+    )
+    preview_image = forms.FileField(
+        label='Превью товара',  # Добавляем явное название поля
+        widget=forms.ClearableFileInput(  # Используем ClearableFileInput для возможности удаления файлов
+            attrs={'placeholder': 'Превью товара'},
+        ),
+        required=False  # Поле необязательное
+    )
+    category = forms.ModelChoiceField(
+        label='Категория',
+        queryset=SubCategories.objects.all(),
+        widget=forms.Select(
+            attrs={'placeholder': 'Категория'}
+        )
+    )
+    brand = forms.ModelChoiceField(
+        label='Бренд',
+        queryset=Brands.objects.all(),
+        widget=forms.Select(
+            attrs={'placeholder': 'Бренд'}
+        )
+    )
+    price = forms.DecimalField(
+        label='Цена',  # Добавляем явное название поля
+        widget=forms.NumberInput(
+            attrs={'placeholder': 'Цена'}
+        )
+    )
+
+    class Meta:
+        model = Products
+        fields = ('name', 'description', 'preview_image', 'category', 'brand', 'price')

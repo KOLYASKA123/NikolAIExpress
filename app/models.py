@@ -12,6 +12,7 @@ class Products(models.Model):
     description = models.TextField()
     date_created = models.DateField(default=timezone.now)
     date_updated = models.DateField(auto_now=True)
+    preview_image = models.FileField(default=None, null=True)
     brand = models.ForeignKey('Brands', on_delete=models.CASCADE)
     category = models.ForeignKey('SubCategories', on_delete=models.SET_DEFAULT, blank=True, default=1)
     price = models.FloatField(validators=[MinValueValidator(0.01)])
@@ -92,3 +93,9 @@ class Feedbacks(models.Model):
 
     def __str__(self):
         return self.text
+
+
+class ProductMedia(models.Model):
+    id = models.AutoField(primary_key=True)
+    product = models.ForeignKey(Products, on_delete=models.CASCADE, related_name='media')
+    file = models.FileField(null=True, verbose_name='Путь к файлу')

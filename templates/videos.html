@@ -1,0 +1,21 @@
+{% extends "index.html" %}
+{% load static %}
+{% block head %}
+	<link rel="stylesheet" href={% static 'styles/css/site.css' %}>
+{% endblock %}
+{% block content %}
+<div class="grid-container">
+    <div class="grid-item">
+        <video controls="controls" poster="/static/app/media/DVSZastavka.png" style="max-width: 100%;">
+            <source src="/static/app/media/DVS.webm" type='video/webm'>
+            <source src="/static/app/media/DVS.ogg" type='audio/ogg'>
+        </video>
+    </div>
+    <div class="grid-item">
+        <video controls="controls" poster="/static/app/media/ScepaZastavka.png" style="max-width: 100%;">
+            <source src="/static/app/media/Scepa.webm" type='video/webm'>
+            <source src="/static/app/media/Scepa.ogg" type='audio/ogg'>
+        </video>
+    </div>
+</div>
+{% endblock %}

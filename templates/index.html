@@ -11,19 +11,21 @@
 </head>
 <body>
 <header>
-    <a href="{% url 'main' %}">
-        <img id="logo" src={% static 'img/img.png' %}>
-    </a>
-    <nav>
+    <nav id="navigation-bar">
+        <a id="logo" href="{% url 'products' %}">
+            NikolAI Express
+        </a>
+        {% if user.is_superuser %}
+            <a href={% url 'create_product' %}>Создание товара</a>
+        {% endif %}
         <a>Категории</a>
-        <a></a>
         <a>Заказы</a>
         <a>Корзина</a>
         {% if user.is_authenticated %}
             <a>Профиль {{ user }}</a>
             <form method="post" action={% url 'logout' %}>
                 {% csrf_token %}
-                <input id="send-button" type="submit" value="Выйти">
+                <button type="submit">Выйти</button>
             </form>
         {% else %}
             <a href={% url 'login' %}>Войти</a>
@@ -38,6 +40,7 @@
     <a class="footer-links blink" href={% url 'main' %}>О NikolAIExpress</a>
     <a class="footer-links blink" href={% url 'partners' %}>Полезные ресурсы</a>
     <a class="footer-links blink" href={% url 'feedback' %}>Обратная связь</a>
+    <a class="footer-links blink" href={% url 'videos' %} >Видео</a>
 </footer>
 </body>
 </html>

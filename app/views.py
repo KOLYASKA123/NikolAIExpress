@@ -1,10 +1,17 @@
 from django.shortcuts import render, redirect
 from django.views.generic import View, ListView, DetailView, CreateView, DeleteView, UpdateView
-from .forms import FeedbackForm, ProductFeedbackForm
+from .forms import FeedbackForm, ProductFeedbackForm, ProductForm
 from .models import Products, Feedbacks
 from django.utils import timezone
+from django.contrib.auth.mixins import UserPassesTestMixin
 # Create your views here.
 
+class AdminRequiredMixin(UserPassesTestMixin):
+    def test_func(self):
+        return self.request.user.is_superuser
+
+    def handle_no_permission(self):
+        return redirect('main')
 
 class GlobalFeedbackView(View):
 
@@ -40,11 +47,28 @@ class GlobalFeedbackView(View):
         return render(self.request, 'pool.html', {'form': form})
 
 
-# class ProductCreateView(CreateView):
+# class ProductCreateView(AdminRequiredMixin, CreateView):
 #     model = Products
+#     form_class = ProductForm
 #     template_name = 'product_form.html'
-#     fields = '__all__'
 #     success_url = '/products/'
+#
+#     def form_valid(self, form: ProductForm):
+#
+#         print(form.cleaned_data)
+#         return redirect('products') #super().form_valid(form)
+
+class ProductFormView(AdminRequiredMixin, View):
+    def get(self, request):
+        form = ProductForm()
+        return render(request, 'product_form.html', {'form': form})
+
+    def post(self, request):
+        form = ProductForm(request.POST, request.FILES)
+        if form.is_valid():
+            product = form.save()
+            return redirect('product', pk=product.id)
+        return render(request, 'product_form.html', {'form': form})
 
 
 class ProductListView(ListView):

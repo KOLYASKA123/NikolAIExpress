@@ -7,8 +7,8 @@
 {% endblock %}
 {% block content %}
     <h3 id="hierarchy">
-        <a>Назад</a> |
-        <a href={% url 'products' %}>Все товары</a> / 
+        <a href={% url 'products' %}>Назад</a> |
+        <a>Все товары</a> / 
         <a>{{ product.category.parent }}</a> / 
         <a>{{ product.category }}</a> / 
         <a>{{ product.brand }}</a>
@@ -16,7 +16,13 @@
     <div style="display: flex">
         <div id="images" class="blocks-style">
             <div class="blocks-content">
-                
+                {% if product.preview_image %}
+					<div style="text-align: center">
+                        <img style="width: 50%; border-radius: 15px;" src="{{ product.preview_image.url }}" alt="product.preview_image">
+                    </div>
+				{% else %}
+					<div>Нет картинки</div>
+				{% endif %}
             </div>
         </div>
 	    <div id="product-description" class="blocks-style">
@@ -38,6 +44,7 @@
     <div id="feedbacks" class="blocks-style">
         <div class="blocks-content">
             <h2>Отзывы | Вопросы</h2><br>
+			{% if user.is_authenticated %}
             <form method="post" action={% url 'create_feedback' product.id %}>
                 {% csrf_token %}
                 {{ form.text }}
@@ -46,6 +53,12 @@
                 <br>
                 <br>
             </form>
+			{% else %}
+			<div>Отзывы могут оставлять только авторизованные пользователи.</div>
+			{% endif %}
+            <br>
+            <hr style="border-color: limegreen; border-width: 2px; border-style: solid;">
+            <br>
             {% for feedback in product.feedbacks.all %}
                 <div class="feedback">
                     <h4>
@@ -55,11 +68,6 @@
                     <p>
                         {{ feedback.text }}
                     </p>
-{#                    {% if feedback.user == user %}#}
-{#                        <a href="">#}
-{#                            Изменить отзыв #}
-{#                        </a>#}
-{#                    {% endif %} #}
                 </div>
             {% empty %}
                 <p>На данный товар пока что нет отзывов.</p>

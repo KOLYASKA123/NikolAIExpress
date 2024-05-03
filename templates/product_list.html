@@ -8,8 +8,15 @@
 {% block content %}
     <div id="cards-container">
 	    {% for product in products %}
-            <a href="{{ product.get_absolute_url }}">
+            <a class="blink" href="{{ product.get_absolute_url }}">
 	    	    <div class="card">
+				{% if product.preview_image %}
+					<div style="text-align: center">
+                        <img style="width: 50%; border-radius: 15px;" src="{{ product.preview_image.url }}" alt="product.preview_image">
+                    </div>
+				{% else %}
+					<div>Нет картинки</div>
+				{% endif %}
                     <div>{{ product.price }} ₽</div>
                     <div>{{ product.brand }} / {{ product }}</div>
                 </div>
