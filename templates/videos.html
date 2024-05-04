@@ -4,18 +4,10 @@
 	<link rel="stylesheet" href={% static 'styles/css/site.css' %}>
 {% endblock %}
 {% block content %}
-<div class="grid-container">
-    <div class="grid-item">
-        <video controls="controls" poster="/static/app/media/DVSZastavka.png" style="max-width: 100%;">
-            <source src="/static/app/media/DVS.webm" type='video/webm'>
-            <source src="/static/app/media/DVS.ogg" type='audio/ogg'>
-        </video>
-    </div>
-    <div class="grid-item">
-        <video controls="controls" poster="/static/app/media/ScepaZastavka.png" style="max-width: 100%;">
-            <source src="/static/app/media/Scepa.webm" type='video/webm'>
-            <source src="/static/app/media/Scepa.ogg" type='audio/ogg'>
-        </video>
-    </div>
+<div style="text-align: center">
+    <br>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/sBR8GTUxznM?si=w9zgGPj7tBkHmEuC&amp;start=8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    <br>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/hvGVmBl-7Lo?si=H-UjRhDwrNuy9Nk_" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 </div>
 {% endblock %}

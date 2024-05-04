@@ -4,6 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 from django.views.generic import View
 from .forms import RegistrationForm
+from django.contrib.auth import authenticate, login
 # Create your views here.
 
 
@@ -27,7 +28,8 @@ class RegistrationView(View):
             reg_f.is_superuser = False
             reg_f.date_joined = datetime.now()
             reg_f.last_login = datetime.now()
-            reg_f.save()
+            user = reg_f.save()
+            login(request, user)
             return redirect('/')
         return render(
             request,

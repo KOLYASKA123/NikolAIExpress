@@ -10,14 +10,19 @@
 	    {% for product in products %}
             <a class="blink" href="{{ product.get_absolute_url }}">
 	    	    <div class="card">
-				{% if product.preview_image %}
-					<div style="text-align: center">
-                        <img style="width: 50%; border-radius: 15px;" src="{{ product.preview_image.url }}" alt="product.preview_image">
-                    </div>
-				{% else %}
-					<div>Нет картинки</div>
-				{% endif %}
+                    {% if product.preview_image %}
+                        <div style="text-align: center">
+                            <img style="width: 50%; border-radius: 15px;" src="{{ product.preview_image.url }}" alt="product.preview_image">
+                        </div>
+                    {% else %}
+                        <div>Нет картинки</div>
+                    {% endif %}
                     <div>{{ product.price }} ₽</div>
+                    {% if product.feedbacks.count == 0 %}
+                        <div>Нет отзывов</div>
+                    {% else %}
+                        <div>Отзывов: {{ product.feedbacks.count }}</div>
+                    {% endif %}
                     <div>{{ product.brand }} / {{ product }}</div>
                 </div>
             </a>

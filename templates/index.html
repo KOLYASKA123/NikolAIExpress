@@ -10,13 +10,18 @@
     {% endblock %}
 </head>
 <body>
-<header>
-    <nav id="navigation-bar">
+<header id="navigation-bar">
+    <div style="display: flex; justify-content: center; align-items: center;">
         <a id="logo" href="{% url 'products' %}">
-            NikolAI Express
+            <img src={% static 'img/img.png' %} alt="Логотип">
         </a>
+    </div>
+    <div style="display: flex; justify-content: center; align-items: center;">
+        Поисковая строка
+    </div>
+    <div style="display: flex; justify-content: flex-end; align-items: center;">
         {% if user.is_superuser %}
-            <a href={% url 'create_product' %}>Создание товара</a>
+            <a href={% url 'create_product' %}>Новый товар</a>
         {% endif %}
         <a>Категории</a>
         <a>Заказы</a>
@@ -30,7 +35,7 @@
         {% else %}
             <a href={% url 'login' %}>Войти</a>
         {% endif %}
-    </nav>
+    </div>
 </header>
 <main>
     {% block content %}

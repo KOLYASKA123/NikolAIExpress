@@ -22,12 +22,8 @@
                     {% endif %}
                 </div>
             {% endfor %}
-            <a href={% url 'registration' %}>У меня нет аккаунта</a><br>
-            <input 
-                    id="send-button" 
-                    type="submit" 
-                    value="Отправить"
-            >
+            <a class="blink" href={% url 'registration' %}>У меня нет аккаунта</a><br><br>
+            <input id="send-button" type="submit" value="Отправить">
         </form>
     </div>
 {% endblock %}
