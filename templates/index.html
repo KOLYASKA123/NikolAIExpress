@@ -27,7 +27,8 @@
         <a>Заказы</a>
         <a>Корзина</a>
         {% if user.is_authenticated %}
-            <a href={% url 'profile' user.id %}>Профиль {{ user }}</a>
+            <a>Профиль {{ user.username }}</a>
+            {% comment %} href={% url 'profile' user.id %} {% endcomment %}
             <form method="post" action={% url 'logout' %}>
                 {% csrf_token %}
                 <button type="submit">Выйти</button>

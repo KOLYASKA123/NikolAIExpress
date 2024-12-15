@@ -8,7 +8,7 @@ class AuthForm(AuthenticationForm):
     username = UsernameField(
         widget=forms.TextInput(
             attrs={
-                'placeholder': _('Имя пользователя'),
+                'placeholder': _('Электронная почта'),
                 'autofocus': True
             }
         )
@@ -25,6 +25,13 @@ class AuthForm(AuthenticationForm):
 
 
 class RegistrationForm(UserCreationForm):
+    email = forms.EmailField(
+        widget=forms.EmailInput(
+            attrs={
+                'placeholder': 'Электронная почта'
+            }
+        )
+    )
     password1 = forms.CharField(
         strip=False,
         widget=forms.PasswordInput(
@@ -48,7 +55,7 @@ class RegistrationForm(UserCreationForm):
 
     class Meta:
         model = get_user_model()
-        fields = ('username', 'password1', 'password2')
+        fields = ('username', 'email', 'password1', 'password2')
         widgets = {
             'username': forms.TextInput(
                 attrs={

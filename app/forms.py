@@ -1,5 +1,5 @@
 from django import forms
-from .models import Feedbacks, Products, Categories, SubCategories, Brands
+from .models import Review, Product, Category, Seller
 
 
 class FeedbackForm(forms.Form):
@@ -74,7 +74,7 @@ class FeedbackForm(forms.Form):
     )
 
 
-class ProductFeedbackForm(forms.Form):
+class ProductReviewForm(forms.Form):
     text = forms.CharField(
 
         max_length=500,
@@ -117,16 +117,16 @@ class ProductForm(forms.ModelForm):
     )
     category = forms.ModelChoiceField(
         label='Категория',
-        queryset=SubCategories.objects.all(),
+        queryset=Category.objects.all(),
         widget=forms.Select(
             attrs={'placeholder': 'Категория'}
         )
     )
-    brand = forms.ModelChoiceField(
-        label='Бренд',
-        queryset=Brands.objects.all(),
+    seller = forms.ModelChoiceField(
+        label='Продавец',
+        queryset=Seller.objects.all(),
         widget=forms.Select(
-            attrs={'placeholder': 'Бренд'}
+            attrs={'placeholder': 'Продавец'}
         )
     )
     price = forms.DecimalField(
@@ -137,5 +137,5 @@ class ProductForm(forms.ModelForm):
     )
 
     class Meta:
-        model = Products
-        fields = ('name', 'description', 'preview_image', 'category', 'brand', 'price')
+        model = Product
+        fields = ('name', 'description', 'category', 'seller', 'price')

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.generic import View, ListView, DetailView, CreateView, DeleteView, UpdateView
-from .forms import FeedbackForm, ProductFeedbackForm, ProductForm
-from .models import Products, Feedbacks
+from .forms import FeedbackForm, ProductReviewForm, ProductForm
+from .models import Product, Review
 from django.utils import timezone
 from django.contrib.auth.mixins import UserPassesTestMixin
 # Create your views here.
@@ -72,27 +72,27 @@ class ProductFormView(AdminRequiredMixin, View):
 
 
 class ProductListView(ListView):
-    model = Products
+    model = Product
     template_name = 'product_list.html'
     context_object_name = 'products'
 
 
 class ProductDetailView(DetailView):
-    model = Products
+    model = Product
     template_name = 'product_detail.html'
     context_object_name = 'product'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form'] = ProductFeedbackForm()
+        context['form'] = ProductReviewForm()
         return context
 
 class ProductFeedbackView(View):
     def post(self, request, pk):
-        product = Products.objects.get(id=pk)
-        form = ProductFeedbackForm(self.request.POST)
+        product = Product.objects.get(id=pk)
+        form = ProductReviewForm(self.request.POST)
         if form.is_valid():
-            Feedbacks.objects.create(
+            Review.objects.create(
                 product=product,
                 user=self.request.user,
                 text=form.cleaned_data['text'],

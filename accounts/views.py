@@ -5,6 +5,8 @@ from django.shortcuts import render, redirect
 from django.views.generic import View
 from .forms import RegistrationForm
 from django.contrib.auth import authenticate, login
+from accounts.models import CustomUser
+from django.contrib.auth.models import User
 # Create your views here.
 
 
@@ -22,13 +24,14 @@ class RegistrationView(View):
     def post(self, request):
         registration_form = RegistrationForm(request.POST)
         if registration_form.is_valid():  # валидация полей формы
-            reg_f = registration_form.save(commit=False)
-            reg_f.is_staff = False
-            reg_f.is_active = True
-            reg_f.is_superuser = False
-            reg_f.date_joined = datetime.now()
-            reg_f.last_login = datetime.now()
-            user = reg_f.save()
+            user: CustomUser = registration_form.save(commit=False)
+            user.is_staff = False
+            user.is_active = True
+            user.is_superuser = False
+            user.date_joined = datetime.now()
+            user.last_login = datetime.now()
+            user.save()
+            
             login(request, user)
             return redirect('/')
         return render(
