@@ -6,20 +6,19 @@ from django.utils import timezone
 # Create your models here.
 
 
-class Products(models.Model):
+class Product(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     description = models.TextField()
-    date_created = models.DateField(default=timezone.now)
-    date_updated = models.DateField(auto_now=True)
-    preview_image = models.FileField(default=None, null=True)
-    brand = models.ForeignKey('Brands', on_delete=models.CASCADE)
-    category = models.ForeignKey('SubCategories', on_delete=models.SET_DEFAULT, blank=True, default=1)
+    date_created = models.DateTimeField(default=timezone.now)
+    date_updated = models.DateTimeField(auto_now=True)
+    seller = models.ForeignKey('Seller', on_delete=models.CASCADE)
+    category = models.ForeignKey('Category', on_delete=models.SET_DEFAULT, blank=True, default=None)
     price = models.FloatField(validators=[MinValueValidator(0.01)])
 
     class Meta:
         ordering = ['-date_created']
-        unique_together = ('name', 'brand')
+        unique_together = ('name', 'seller')
         verbose_name = 'Товар'
         verbose_name_plural = 'Товары'
 
@@ -30,12 +29,12 @@ class Products(models.Model):
         return reverse("product", kwargs={"pk": self.pk})
 
 
-class Brands(models.Model):
+class Seller(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(unique=True, max_length=100)
     description = models.TextField()
-    date_created = models.DateField(default=timezone.now)
-    date_updated = models.DateField(auto_now=True)
+    date_created = models.DateTimeField(default=timezone.now)
+    date_updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name = 'Бренд'
@@ -45,9 +44,10 @@ class Brands(models.Model):
         return self.name
 
 
-class Categories(models.Model):
+class Category(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(unique=True, max_length=100)
+    main_category = models.ForeignKey("Category", on_delete=models.SET_DEFAULT, null=True, default=None)
 
     class Meta:
         verbose_name = 'Категория'
@@ -55,33 +55,41 @@ class Categories(models.Model):
 
     def __str__(self):
         return self.name
+    
 
-
-class SubCategories(models.Model):
+class PaymentType(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(unique=True, max_length=100)
-    parent = models.ForeignKey('Categories', on_delete=models.CASCADE)
 
     class Meta:
-        verbose_name = 'Подкатегория'
-        verbose_name_plural = 'Подкатегории'
+        verbose_name = 'Тип оплаты'
+        verbose_name_plural = 'Типы оплаты'
 
     def __str__(self):
         return self.name
 
 
-# class Characteristics(models.Model):
-#     ...
-#
-#
-# class Order(models.Model):
-#     ...
-
-
-class Feedbacks(models.Model):
+class Order(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(to=get_user_model(), on_delete=models.CASCADE)
-    product = models.ForeignKey(Products, on_delete=models.CASCADE, related_name='feedbacks')
+    payment_type = models.ForeignKey(PaymentType, on_delete=models.SET_DEFAULT, default=1)
+    date_created = models.DateTimeField(default=timezone.now)
+    date_updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'Заказ'
+        verbose_name_plural = 'Заказы'
+
+class OrderItem(models.Model):
+    id = models.AutoField(primary_key=True)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+
+
+class Review(models.Model):
+    id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(to=get_user_model(), on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='feedbacks')
     text = models.CharField(max_length=500, null=True, blank=True)
     date_created = models.DateTimeField(default=timezone.now)
     date_updated = models.DateTimeField(auto_now=True)
@@ -97,5 +105,5 @@ class Feedbacks(models.Model):
 
 class ProductMedia(models.Model):
     id = models.AutoField(primary_key=True)
-    product = models.ForeignKey(Products, on_delete=models.CASCADE, related_name='media')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='media')
     file = models.FileField(null=True, verbose_name='Путь к файлу')

@@ -1,20 +1,19 @@
 from django.contrib import admin
 from .models import (
-    Products,
-    Brands,
-    Categories,
-    SubCategories,
-    Feedbacks,
+    Product,
+    Seller,
+    Category,
+    Review,
 )
 # Register your models here.
 
 
-@admin.register(Products)
+@admin.register(Product)
 class ProductsAdmin(admin.ModelAdmin):
-    list_display = ['name', 'brand', 'description', 'category', 'price']
+    list_display = ['name', 'seller', 'description', 'category', 'price']
     readonly_fields = ['date_created', 'date_updated']
 
-@admin.register(Brands)
+@admin.register(Seller)
 class BrandsAdmin(admin.ModelAdmin):
     list_display = [
         'name',
@@ -22,20 +21,14 @@ class BrandsAdmin(admin.ModelAdmin):
     ]
     readonly_fields = ['date_created', 'date_updated']
 
-@admin.register(Categories)
+@admin.register(Category)
 class CategoriesAdmin(admin.ModelAdmin):
     list_display = [
         'name',
     ]
 
-@admin.register(SubCategories)
-class SubCategoriesAdmin(admin.ModelAdmin):
-    list_display = [
-        'name',
-        'parent',
-    ]
 
-@admin.register(Feedbacks)
+@admin.register(Review)
 class FeedbacksAdmin(admin.ModelAdmin):
     list_display = [
         'user',
