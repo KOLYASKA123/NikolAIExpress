@@ -45,7 +45,7 @@
         <div class="blocks-content">
             <h2>Отзывы | Вопросы</h2><br>
 			{% if user.is_authenticated %}
-            <form method="post" action={% url 'create_feedback' product.id %}>
+            <form method="post" action={% url 'create_review' product.id %}>
                 {% csrf_token %}
                 {{ form.text }}
                 <br>

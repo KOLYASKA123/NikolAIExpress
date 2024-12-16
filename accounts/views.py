@@ -1,12 +1,15 @@
 from datetime import datetime
 
-from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
-from django.views.generic import View
-from .forms import RegistrationForm
-from django.contrib.auth import authenticate, login
+from django.urls import reverse_lazy
+from django.views.generic import View, TemplateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+from app.models import OrderItem
+from .forms import RegistrationForm, UserUpdateForm
+from django.contrib.auth import login
 from accounts.models import CustomUser
-from django.contrib.auth.models import User
+from django.http import JsonResponse
 # Create your views here.
 
 
@@ -31,7 +34,7 @@ class RegistrationView(View):
             user.date_joined = datetime.now()
             user.last_login = datetime.now()
             user.save()
-            
+
             login(request, user)
             return redirect('/')
         return render(
@@ -41,3 +44,34 @@ class RegistrationView(View):
                 'form': registration_form
             }
         )
+    
+
+class UserProfileView(LoginRequiredMixin, TemplateView):
+    template_name = "registration/profile.html"
+    success_url = reverse_lazy("profile")
+
+    def get(self, request, *args, **kwargs):
+        user_form = UserUpdateForm(instance=request.user)
+        orders = self.request.user.orders
+        return render(
+            request, 
+            self.template_name, 
+            {
+                "user_form": user_form, 
+                "user_profile": request.user,
+                "orders": orders
+            }
+        )
+
+    def post(self, request, *args, **kwargs):
+        user_form = UserUpdateForm(request.POST, request.FILES, instance=self.request.user)
+        if user_form.is_valid():
+            user_form.save()
+        return redirect(self.success_url)
+
+
+class UserDeleteView(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        user = self.request.user
+        user.delete()
+        return JsonResponse({"message": "Аккаунт удалён"}, status=200)

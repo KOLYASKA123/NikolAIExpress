@@ -1,52 +1,53 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en" style="scroll-behavior: smooth;">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href={% static 'img/favicon.ico' %} type="image/x-icon">
-    <link rel="shortcut icon" href={% static 'img/favicon.ico' %} type="image/x-icon">
-    {% block head %}
-    {% endblock %}
-</head>
-<body>
-<header id="navigation-bar">
-    <div style="display: flex; justify-content: center; align-items: center;">
-        <a id="logo" href="{% url 'products' %}">
-            <img src={% static 'img/img.png' %} alt="Логотип">
-        </a>
-    </div>
-    <div style="display: flex; justify-content: center; align-items: center;">
-        Поисковая строка
-    </div>
-    <div style="display: flex; justify-content: flex-end; align-items: center;">
-        {% if user.is_superuser %}
-            <a href={% url 'create_product' %}>Новый товар</a>
-        {% endif %}
-        <a>Категории</a>
-        <a>Заказы</a>
-        <a>Корзина</a>
-        {% if user.is_authenticated %}
-            <a>Профиль {{ user.username }}</a>
-            {% comment %} href={% url 'profile' user.id %} {% endcomment %}
-            <form method="post" action={% url 'logout' %}>
-                {% csrf_token %}
-                <button type="submit">Выйти</button>
-            </form>
-        {% else %}
-            <a href={% url 'login' %}>Войти</a>
-        {% endif %}
-    </div>
-</header>
-<main>
-    {% block content %}
-    {% endblock %}
-</main>
-<footer>
-    <a class="footer-links blink" href={% url 'main' %}>О NikolAIExpress</a>
-    <a class="footer-links blink" href={% url 'partners' %}>Полезные ресурсы</a>
-    <a class="footer-links blink" href={% url 'feedback' %}>Обратная связь</a>
-    <a class="footer-links blink" href={% url 'videos' %} >Видео</a>
-</footer>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" href={% static 'img/favicon.ico' %} type="image/x-icon">
+        <link rel="shortcut icon" href={% static 'img/favicon.ico' %} type="image/x-icon">
+        {% block head %}
+        {% endblock %}
+    </head>
+    <body>
+        <header id="navigation-bar">
+            <div style="display: flex; justify-content: center; align-items: center;">
+                <a id="logo" href="{% url 'products' %}">
+                    <img src={% static 'img/img.png' %} alt="Логотип">
+                </a>
+            </div>
+            <div style="display: flex; justify-content: center; align-items: center;">
+                Поисковая строка
+            </div>
+            <div style="display: flex; justify-content: flex-end; align-items: center;">
+                {% if user.is_superuser %}
+                <a href={% url 'create_product' %}>Новый товар</a>
+                {% endif %}
+                <a>Категории</a>
+                <a>Заказы</a>
+                <a>Корзина</a>
+                {% if user.is_authenticated %}
+                <a href={% url 'profile' %}>Профиль {{ user.username }}</a>
+                <form method="post" action={% url 'logout' %}>
+                    {% csrf_token %}
+                    <button type="submit">Выйти</button>
+                </form>
+                {% else %}
+                <a href={% url 'login' %}>Войти</a>
+                {% endif %}
+            </div>
+        </header>
+        <main>
+            {% block content %}
+            {% endblock %}
+        </main>
+        <footer>
+            <a class="footer-links blink" href={% url 'main' %}>О NikolAIExpress</a>
+            <a class="footer-links blink" href={% url 'partners' %}>Полезные ресурсы</a>
+            <a class="footer-links blink" href={% url 'feedback' %}>Обратная связь</a>
+            <a class="footer-links blink" href={% url 'videos' %} >Видео</a>
+            <a class="footer-links blink" >Как стать продавцом?</a>
+            {% comment %} href={% url 'how_to_become_a_seller' %} {% endcomment %}
+        </footer>
+    </body>
 </html>

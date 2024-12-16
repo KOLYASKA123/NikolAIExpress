@@ -87,7 +87,7 @@ class ProductDetailView(DetailView):
         context['form'] = ProductReviewForm()
         return context
 
-class ProductFeedbackView(View):
+class ProductReviewView(View):
     def post(self, request, pk):
         product = Product.objects.get(id=pk)
         form = ProductReviewForm(self.request.POST)

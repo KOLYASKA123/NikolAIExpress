@@ -12,13 +12,13 @@ class Product(models.Model):
     description = models.TextField()
     date_created = models.DateTimeField(default=timezone.now)
     date_updated = models.DateTimeField(auto_now=True)
-    seller = models.ForeignKey('Seller', on_delete=models.CASCADE)
+    brand = models.ForeignKey('Brand', on_delete=models.CASCADE)
     category = models.ForeignKey('Category', on_delete=models.SET_DEFAULT, blank=True, default=None)
     price = models.FloatField(validators=[MinValueValidator(0.01)])
 
     class Meta:
         ordering = ['-date_created']
-        unique_together = ('name', 'seller')
+        unique_together = ('name', 'brand')
         verbose_name = 'Товар'
         verbose_name_plural = 'Товары'
 
@@ -29,10 +29,9 @@ class Product(models.Model):
         return reverse("product", kwargs={"pk": self.pk})
 
 
-class Seller(models.Model):
+class Brand(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(unique=True, max_length=100)
-    description = models.TextField()
     date_created = models.DateTimeField(default=timezone.now)
     date_updated = models.DateTimeField(auto_now=True)
 
@@ -47,7 +46,14 @@ class Seller(models.Model):
 class Category(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(unique=True, max_length=100)
-    main_category = models.ForeignKey("Category", on_delete=models.SET_DEFAULT, null=True, default=None)
+    main_category = models.ForeignKey(
+        "Category", 
+        on_delete=models.SET_DEFAULT, 
+        null=True, 
+        default=None,
+        blank=True,
+        related_name='subcategories'
+    )
 
     class Meta:
         verbose_name = 'Категория'
@@ -55,24 +61,21 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
-    
 
-class PaymentType(models.Model):
+
+class OrderStatus(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(unique=True, max_length=100)
 
     class Meta:
-        verbose_name = 'Тип оплаты'
-        verbose_name_plural = 'Типы оплаты'
-
-    def __str__(self):
-        return self.name
+        verbose_name = 'Статус части заказа'
+        verbose_name_plural = 'Статусы частей заказа'
 
 
 class Order(models.Model):
     id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(to=get_user_model(), on_delete=models.CASCADE)
-    payment_type = models.ForeignKey(PaymentType, on_delete=models.SET_DEFAULT, default=1)
+    user = models.ForeignKey(to=get_user_model(), on_delete=models.CASCADE, related_name='orders')
+    status = models.ForeignKey(OrderStatus, on_delete=models.SET_DEFAULT, default=1)
     date_created = models.DateTimeField(default=timezone.now)
     date_updated = models.DateTimeField(auto_now=True)
 
@@ -80,16 +83,17 @@ class Order(models.Model):
         verbose_name = 'Заказ'
         verbose_name_plural = 'Заказы'
 
+
 class OrderItem(models.Model):
     id = models.AutoField(primary_key=True)
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
 
 class Review(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(to=get_user_model(), on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='feedbacks')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
     text = models.CharField(max_length=500, null=True, blank=True)
     date_created = models.DateTimeField(default=timezone.now)
     date_updated = models.DateTimeField(auto_now=True)

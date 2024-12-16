@@ -1,5 +1,9 @@
 from django.contrib.auth import get_user_model, password_validation
-from django.contrib.auth.forms import AuthenticationForm, UsernameField, UserCreationForm
+from django.contrib.auth.forms import (
+    AuthenticationForm, 
+    UsernameField, 
+    UserCreationForm
+)
 from django import forms
 from django.utils.translation import gettext as _
 
@@ -60,6 +64,23 @@ class RegistrationForm(UserCreationForm):
             'username': forms.TextInput(
                 attrs={
                     'placeholder': 'Имя пользователя'
+                }
+            )
+        }
+
+class UserUpdateForm(forms.ModelForm):
+    class Meta:
+        model = get_user_model()
+        fields = ('username', 'avatar', 'status')
+        widgets = {
+            'username': forms.TextInput(
+                attrs={
+                    'placeholder': 'Имя пользователя'
+                }
+            ),
+            'status': forms.Textarea(
+                attrs={
+                    'placeholder': 'Статус'
                 }
             )
         }

@@ -16,6 +16,7 @@
 body {
     font-family: my-bold-font;
     color: lime;
+    height: 100%; /* Убедись, что нет фиксированной высоты */
 }
 
 a {
@@ -38,7 +39,6 @@ h1 {
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-fill-color: transparent;
     background-size: 500% auto;
     animation: textShine 2s ease-in-out infinite alternate;
     padding-bottom: 20px;
@@ -149,6 +149,7 @@ footer {
 .footer-links {
     color: lime;
     text-decoration: none;
+    margin-left: 10px;
 }
 
 .shadow-image-inset {
@@ -172,4 +173,3 @@ li > a > img {
     margin-bottom: 100px;
     text-decoration: none;
 }
-

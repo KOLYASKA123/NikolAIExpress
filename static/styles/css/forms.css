@@ -4,7 +4,17 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    overflow: auto;
+    padding: 30px;
+    border-radius: 25px;
+    background-color: hsl(0, 0%, 20%);
+    max-width: 50vh;
+}
+
+main {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
 }
 
 .form-group > input[type="text"],
@@ -12,7 +22,8 @@
 .form-group > input[type="password"],
 .form-group > input[type="number"],
 .form-group > select,
-.form-group > textarea {
+.form-group > textarea,
+.form-group > input[type="file"] {
     border-radius: 15px;
     padding: 15px 25px;
     margin-bottom: 20px;
@@ -29,7 +40,8 @@
 .form-group > input[type="password"]:hover,
 .form-group > input[type="number"]:hover,
 .form-group > select:hover,
-.form-group > textarea:hover {
+.form-group > textarea:hover,
+.form-group > input[type="file"]:hover {
     border: 1px solid lime;
 }
 
@@ -38,7 +50,8 @@
 .form-group > input[type="password"]:focus,
 .form-group > input[type="number"]:focus,
 .form-group > select:focus,
-.form-group > textarea:focus {
+.form-group > textarea:focus,
+.form-group > input[type="file"]:focus {
     border: 1px solid red;
     background-color: #818181;
 }
@@ -55,4 +68,3 @@ input[type="submit"] {
     text-align: center;
     text-decoration: none;
 }
-

@@ -1,0 +1,65 @@
+{% extends "index.html" %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href={% static 'styles/css/site.css' %}>
+    <link rel="stylesheet" href={% static 'styles/css/forms.css' %}>
+{% endblock head %}
+
+{% block content %}
+
+    <div style="
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;">
+        <div>
+            Корзина
+        </div>
+        <div>
+            Заказанные товары
+        </div>
+    </div>
+    <div class="form-container">
+        <h1>Профиль пользователя {{user.username}}</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for field in user_form %}
+            <div class="form-group">
+                {{field}}
+                {% if field.errors %}
+                    <ul class="errors">
+                        {% for error in field.errors %}
+                            <li>
+                                {{error}}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            {% endfor %}
+            <input id="send-button" type="submit" value="Сохранить">
+        </form>
+        <input style="margin-top: 20px;" id="deleteAccountBtn" type="submit" value="Удалить аккаунт">
+    </div>
+
+    <script>
+        document.getElementById('deleteAccountBtn').addEventListener('click', function () {
+            if (confirm("Вы уверены, что хотите удалить аккаунт? Это действие необратимо.")) {
+                fetch("{% url 'delete_profile' %}", {
+                    method: "POST",
+                    headers: {
+                        "X-CSRFToken": "{{ csrf_token }}",
+                    },
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert("Ваш аккаунт удалён.");
+                        window.location.href = "{% url 'login' %}";
+                    } else {
+                        alert("Ошибка при удалении аккаунта.");
+                    }
+                });
+            }
+        });
+    </script>
+{% endblock %}

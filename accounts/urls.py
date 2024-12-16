@@ -17,4 +17,6 @@ urlpatterns = [
         name='login'
     ),
     path('logout/', LogoutView.as_view(next_page='/'), name='logout'),
+    path("profile/", views.UserProfileView.as_view(), name="profile"),
+    path("profile/delete/", views.UserDeleteView.as_view(), name="delete_profile"),
 ]
