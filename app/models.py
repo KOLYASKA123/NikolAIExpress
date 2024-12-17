@@ -9,11 +9,12 @@ from django.utils import timezone
 class Product(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
+    preview_image = models.FileField(upload_to='images/', null=True, blank=True)
     description = models.TextField()
     date_created = models.DateTimeField(default=timezone.now)
     date_updated = models.DateTimeField(auto_now=True)
     brand = models.ForeignKey('Brand', on_delete=models.CASCADE)
-    category = models.ForeignKey('Category', on_delete=models.SET_DEFAULT, blank=True, default=None)
+    category = models.ForeignKey('Category', on_delete=models.SET_DEFAULT, blank=True, default=None, related_name='products')
     price = models.FloatField(validators=[MinValueValidator(0.01)])
 
     class Meta:
@@ -68,8 +69,11 @@ class OrderStatus(models.Model):
     name = models.CharField(unique=True, max_length=100)
 
     class Meta:
-        verbose_name = 'Статус части заказа'
-        verbose_name_plural = 'Статусы частей заказа'
+        verbose_name = 'Статус заказа'
+        verbose_name_plural = 'Статусы заказа'
+
+    def __str__(self):
+        return self.name
 
 
 class Order(models.Model):
@@ -84,10 +88,18 @@ class Order(models.Model):
         verbose_name_plural = 'Заказы'
 
 
+    def __str__(self):
+        return f"Заказ №{self.id}"
+
+
 class OrderItem(models.Model):
     id = models.AutoField(primary_key=True)
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = 'Часть заказа'
+        verbose_name_plural = 'Части заказа'
 
 
 class Review(models.Model):
@@ -107,7 +119,12 @@ class Review(models.Model):
         return self.text
 
 
-class ProductMedia(models.Model):
+class CartItem(models.Model):
     id = models.AutoField(primary_key=True)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='media')
-    file = models.FileField(null=True, verbose_name='Путь к файлу')
+    user = models.ForeignKey(to=get_user_model(), on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    date_created = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        verbose_name = 'Товар в корзине'
+        verbose_name_plural = 'Товары в корзине'

@@ -1,0 +1,48 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block head %}
+	<title>Товары</title>
+    <link rel="stylesheet" href={% static 'styles/css/site.css' %}>
+    <link rel="stylesheet" href={% static 'styles/css/product_list.css' %}>
+{% endblock %}
+{% block content %}
+{% for order in orders %}
+    <h1>Заказ №{{order.id}}</h1>
+    <div id="cards-container">
+	    {% for item in order.items.all %}
+            <a class="blink" href="{{ item.product.get_absolute_url }}">
+	    	    <div class="card">
+                    {% if item.product.preview_image %}
+                        <div style="text-align: center">
+                            <img style="width: 50%; border-radius: 15px;" src="{{ item.product.preview_image.url }}" alt="item.product.preview_image">
+                        </div>
+                    {% else %}
+                        <div>Нет картинки</div>
+                    {% endif %}
+                    <div>{{ item.product.price }} ₽</div>
+                    {% if item.product.reviews.count == 0 %}
+                        <div>Нет отзывов</div>
+                    {% else %}
+                        <div>Отзывов: {{ item.product.reviews.count }}</div>
+                    {% endif %}
+                    <div>{{ item.product.brand }} / {{ item.product }}</div>
+                    <br>
+                    {% if order.status.name == "Оформлен" %}
+                    <form method="post" action="{% url 'delete_from_cart' item.id %}">
+                        {% csrf_token %}
+                        <button type="submit">Удалить из заказа</button>
+                    </form>
+                    {% endif %}
+                </div>
+            </a>
+	    {% empty %}
+	    	<p>Нет товаров</p>
+	    {% endfor %}
+    </div>
+    <form method="post" action="{% url 'delete_order' order.id %}">
+        <button type="submit">Удалить заказ</button>
+    </form>
+{% empty %}
+    <p>Нет заказов</p>
+{% endfor %}
+{% endblock %}

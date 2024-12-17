@@ -18,10 +18,10 @@
                         <div>Нет картинки</div>
                     {% endif %}
                     <div>{{ product.price }} ₽</div>
-                    {% if product.feedbacks.count == 0 %}
+                    {% if product.reviews.count == 0 %}
                         <div>Нет отзывов</div>
                     {% else %}
-                        <div>Отзывов: {{ product.feedbacks.count }}</div>
+                        <div>Отзывов: {{ product.reviews.count }}</div>
                     {% endif %}
                     <div>{{ product.brand }} / {{ product }}</div>
                 </div>

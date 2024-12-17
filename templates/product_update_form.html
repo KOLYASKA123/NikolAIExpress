@@ -3,12 +3,12 @@
 {% block head %}
     <link rel="stylesheet" href={% static 'styles/css/site.css' %}>
     <link rel="stylesheet" href={% static 'styles/css/forms.css' %}>
-    <title>Создание нового товара</title>
+    <title>Обновление товара</title>
 {% endblock %}
 {% block content %}
     <div class="form-container">
-        <h1>Создание нового товара</h1>
-        <form method="post" action={% url 'create_product' %} enctype="multipart/form-data">
+        <h1>Обновление товара</h1>
+        <form method="post" action={% url 'update_product' product.id %} enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-group">{{ form.name }}</div>
             <div class="form-group">{{ form.description }}</div>

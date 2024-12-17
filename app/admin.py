@@ -4,6 +4,10 @@ from .models import (
     Brand,
     Category,
     Review,
+    CartItem,
+    OrderStatus,
+    OrderItem,
+    Order
 )
 # Register your models here.
 
@@ -34,4 +38,38 @@ class ReviewAdmin(admin.ModelAdmin):
         'product',
         'text',
     ]
+    readonly_fields = ['date_created', 'date_updated']
+
+
+@admin.register(CartItem)
+class CartItemAdmin(admin.ModelAdmin):
+    list_display = [
+        'user',
+        'product',
+    ]
+    readonly_fields = ['date_created']
+
+
+@admin.register(OrderStatus)
+class OrderStatusAdmin(admin.ModelAdmin):
+    list_display = [
+        'name',
+    ]
+
+
+@admin.register(OrderItem)
+class OrderItemAdmin(admin.ModelAdmin):
+    list_display = [
+        'order',
+        'product',
+    ]
+
+
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    list_display = [
+        'user',
+        'status',
+    ]
+
     readonly_fields = ['date_created', 'date_updated']
