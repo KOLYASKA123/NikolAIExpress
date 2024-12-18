@@ -6,21 +6,14 @@
 {% endblock head %}
 
 {% block content %}
-
-    <div style="
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;">
-        <div>
-            Корзина
-        </div>
-        <div>
-            Заказанные товары
-        </div>
-    </div>
     <div class="form-container">
-        <h1>Профиль пользователя {{user.username}}</h1>
+        <h1>Профиль пользователя {{user.username}}</h1><br> 
+        {% if user.avatar %}
+            <div style="text-align: center">
+                <img style="width: 50%; border-radius: 15px;" src="{{ user.avatar.url }}" alt="user.avatar">
+            </div>
+            <br>
+        {% endif %}
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {% for field in user_form %}

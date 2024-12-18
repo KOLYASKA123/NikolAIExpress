@@ -7,6 +7,8 @@ from django.contrib.auth.forms import (
 from django import forms
 from django.utils.translation import gettext as _
 
+from accounts.models import CustomUser
+
 
 class AuthForm(AuthenticationForm):
     username = UsernameField(
@@ -84,3 +86,14 @@ class UserUpdateForm(forms.ModelForm):
                 }
             )
         }
+
+class PasswordChangeForm(forms.Form):
+    email = forms.EmailField(label="Email", required=True, widget=forms.EmailInput(attrs={'placeholder': 'Электронная почта'}))
+    old_password = forms.CharField(label="Старый пароль", widget=forms.PasswordInput(attrs={'placeholder': 'Старый пароль'}), required=True)
+    new_password = forms.CharField(label="Новый пароль", widget=forms.PasswordInput(attrs={'placeholder': 'Новый пароль'}), required=True)
+
+    def clean_email(self):
+        email = self.cleaned_data.get("email")
+        if not CustomUser.objects.filter(email=email).exists():
+            raise forms.ValidationError("Пользователь с таким email не найден.")
+        return email

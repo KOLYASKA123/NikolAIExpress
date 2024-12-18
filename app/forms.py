@@ -138,4 +138,29 @@ class ProductForm(forms.ModelForm):
 
     class Meta:
         model = Product
-        fields = ('name', 'description', 'category', 'brand', 'price')
+        fields = ('name', 'description', 'category', 'preview_image', 'brand', 'price')
+
+
+class ProductFilterForm(forms.Form):
+    query = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Поиск товаров'})
+    )
+    min_price = forms.DecimalField(
+        required=False, 
+        widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Мин. цена'})
+    )
+    max_price = forms.DecimalField(
+        required=False, 
+        widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Макс. цена'})
+    )
+    brand = forms.ModelChoiceField(
+        queryset=Brand.objects.all(), 
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+    category = forms.ModelChoiceField(
+        queryset=Category.objects.all(), 
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )

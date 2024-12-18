@@ -16,6 +16,7 @@ urlpatterns = [
     path('products/create', views.ProductFormView.as_view(), name='create_product'),
     path('products/<int:pk>/update', views.ProductUpdateView.as_view(), name='update_product'),
     path('products/<int:pk>/add-to-cart', views.ProductToCartView.as_view(), name='add_to_cart'),
+    path('products/<int:pk>/add-to-last-order', views.AddProductToLastOrderView.as_view(), name='add_to_last_order'),
     path('products/<int:pk>/delete', views.ProductDeleteView.as_view(), name='delete_product'),
     path('products/<int:pk>/review', views.ProductReviewView.as_view(), name='create_review'),
 
@@ -23,6 +24,7 @@ urlpatterns = [
     path('orders/<int:pk>/delete', views.OrderDeleteView.as_view(), name='delete_order'),
     path('orders/add-product/<int:product_id>', views.AddProductToOrderView.as_view(), name='add_order_item'),
     path('orders/remove-product/<int:order_item_id>', views.RemoveProductFromOrderView.as_view(), name='delete_order_item'),
+    path('orders/cancel/<int:pk>', views.OrderCancelView.as_view(), name='cancel_order'),
 
     path('categories/<int:pk>', views.CategoryView.as_view(), name='categories'),
 

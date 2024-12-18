@@ -34,6 +34,12 @@
                     Дата создания товара: {{ product.date_created }}<br><br>
                     Цена: {{ product.price }} ₽<br><br>
                     <a id="addToCart" href="javascript:void(0);">Добавить в корзину</a><br><br>
+                    {% if user.orders.last.status.name == "Оформлен" %}
+                    <form method="post" action={% url 'add_to_last_order' product.id %}>
+                        {% csrf_token %}
+                        <button type="submit">Добавить товар в последний заказ</button>
+                    </form><br><br>
+                    {% endif %}
                     <script>
                         document.getElementById('addToCart').addEventListener('click', function() {
                             var productId = {{ product.id }}; // Предполагается, что product передан в контекст шаблона
@@ -61,8 +67,10 @@
                             });
                         });
                     </script>
-                    <a href={% url 'update_product' product.id %}>Изменить товар (для администратора)</a><br><br>
-                    <a id="deleteProduct">Удалить товар (для администратора)</a>
+                    {% if user.is_staff %}
+                    <a href={% url 'update_product' product.id %}>Изменить товар (для персонала)</a><br><br>
+                    <a id="deleteProduct">Удалить товар (для персонала)</a>
+                    {% endif %}
                     <script>
                         document.getElementById('deleteProduct').addEventListener('click', function () {
                             if (confirm("Вы уверены, что хотите удалить товар? Это действие необратимо.")) {

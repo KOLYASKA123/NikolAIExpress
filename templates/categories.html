@@ -1,0 +1,27 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block head %}
+	<title>Товары</title>
+    <link rel="stylesheet" href={% static 'styles/css/site.css' %}>
+    <link rel="stylesheet" href={% static 'styles/css/product_list.css' %}>
+{% endblock %}
+{% block content %}
+    <div id="cards-container">
+	    {% for category in categories %}
+            <a class="blink" href={% url 'categories' category.id %}>
+	    	    <div class="card">
+                    {% if category.preview_image %}
+                        <div style="text-align: center">
+                            <img style="width: 50%; border-radius: 15px;" src="{{ category.preview_image.url }}" alt="category.preview_image">
+                        </div>
+                    {% else %}
+                        <div>Нет картинки</div>
+                    {% endif %}
+                    <div>
+                        {{category.name}}
+                    </div>
+                </div>
+            </a>
+	    {% endfor %}
+    </div>
+{% endblock %}

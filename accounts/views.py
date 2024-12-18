@@ -6,10 +6,11 @@ from django.views.generic import View, TemplateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from app.models import OrderItem
-from .forms import RegistrationForm, UserUpdateForm
+from .forms import PasswordChangeForm, RegistrationForm, UserUpdateForm
 from django.contrib.auth import login
 from accounts.models import CustomUser
 from django.http import JsonResponse
+from django.contrib import messages
 # Create your views here.
 
 
@@ -75,3 +76,29 @@ class UserDeleteView(LoginRequiredMixin, View):
         user = self.request.user
         user.delete()
         return JsonResponse({"message": "Аккаунт удалён"}, status=200)
+    
+
+def password_change_view(request):
+    if request.method == "POST":
+        form = PasswordChangeForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data["email"]
+            old_password = form.cleaned_data["old_password"]
+            new_password = form.cleaned_data["new_password"]
+
+            try:
+                user = CustomUser.objects.get(email=email)
+                # Проверяем старый пароль
+                if not user.check_password(old_password):
+                    messages.error(request, "Старый пароль неверный.")
+                else:
+                    user.set_password(new_password)
+                    user.save()
+                    messages.success(request, "Пароль успешно изменён.")
+                    return redirect("login")
+            except CustomUser.DoesNotExist:
+                messages.error(request, "Пользователь не найден.")
+    else:
+        form = PasswordChangeForm()
+
+    return render(request, "change_password.html", {"form": form})

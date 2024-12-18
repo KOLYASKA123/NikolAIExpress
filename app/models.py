@@ -47,6 +47,7 @@ class Brand(models.Model):
 class Category(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(unique=True, max_length=100)
+    preview_image = models.FileField(upload_to='images/', null=True, blank=True)
     main_category = models.ForeignKey(
         "Category", 
         on_delete=models.SET_DEFAULT, 
@@ -86,6 +87,7 @@ class Order(models.Model):
     class Meta:
         verbose_name = 'Заказ'
         verbose_name_plural = 'Заказы'
+        ordering = ['-date_created']
 
 
     def __str__(self):
@@ -128,3 +130,6 @@ class CartItem(models.Model):
     class Meta:
         verbose_name = 'Товар в корзине'
         verbose_name_plural = 'Товары в корзине'
+
+    def __str__(self):
+        return f"{self.product.name} в корзине"

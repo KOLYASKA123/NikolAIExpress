@@ -3,10 +3,10 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic import View, ListView, DetailView, CreateView, DeleteView, UpdateView
 
 from accounts.models import CustomUser
-from .forms import FeedbackForm, ProductReviewForm, ProductForm
-from .models import CartItem, Category, Order, OrderItem, Product, Review
+from .forms import FeedbackForm, ProductFilterForm, ProductReviewForm, ProductForm
+from .models import CartItem, Category, Order, OrderItem, OrderStatus, Product, Review
 from django.utils import timezone
-from django.contrib.auth.mixins import UserPassesTestMixin
+from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 # Create your views here.
 
 class AdminRequiredMixin(UserPassesTestMixin):
@@ -100,7 +100,7 @@ class ProductToCartView(View):
 class ProductFromCartView(View):
     def post(self, request, pk):
         print(pk)
-        CartItem.objects.filter(id=pk).first().delete()
+        CartItem.objects.filter(id=pk).delete()
         return redirect('cart')
     
 class ProductDeleteView(AdminRequiredMixin, View):
@@ -114,9 +114,44 @@ class ProductListView(ListView):
     model = Product
     template_name = 'product_list.html'
     context_object_name = 'products'
+    form_class = ProductFilterForm
+
+    def get_queryset(self):
+        """
+        Переопределяем метод `get_queryset` для фильтрации товаров.
+        """
+        queryset = super().get_queryset()
+        form = self.form_class(self.request.GET or None)
+        
+        if form.is_valid():
+            # Фильтруем товары по минимальной цене
+            if form.cleaned_data.get('min_price'):
+                queryset = queryset.filter(price__gte=form.cleaned_data['min_price'])
+            # Фильтруем товары по максимальной цене
+            if form.cleaned_data.get('max_price'):
+                queryset = queryset.filter(price__lte=form.cleaned_data['max_price'])
+            # Фильтруем товары по бренду
+            if form.cleaned_data.get('brand'):
+                queryset = queryset.filter(brand=form.cleaned_data['brand'])
+            # Фильтруем товары по категории
+            if form.cleaned_data.get('category'):
+                queryset = queryset.filter(category=form.cleaned_data['category'])
+            # Фильтруем товары по поиску
+            if form.cleaned_data.get('query'):
+                queryset = queryset.filter(name__icontains=form.cleaned_data['query'])
+        
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        """
+        Переопределяем метод `get_context_data` для добавления формы в контекст.
+        """
+        context = super().get_context_data(**kwargs)
+        context['form'] = self.form_class(self.request.GET or None)
+        return context
 
 
-class CartItemListView(ListView):
+class CartItemListView(LoginRequiredMixin, ListView):
     model = CartItem
     template_name = 'cart.html'
     context_object_name = 'cart'
@@ -124,7 +159,7 @@ class CartItemListView(ListView):
     def get_queryset(self):
         return super().get_queryset().filter(user=self.request.user).all()
     
-class OrdersListView(ListView):
+class OrdersListView(LoginRequiredMixin, ListView):
     model = Order
     template_name = 'orders.html'
     context_object_name = 'orders'
@@ -137,6 +172,13 @@ class OrderDeleteView(View):
     def post(self, request, pk):
         order = get_object_or_404(Order, pk=pk)
         order.delete()
+        return redirect('orders')
+
+class OrderCancelView(View):
+    def post(self, request, pk):
+        order = get_object_or_404(Order, pk=pk)
+        order.status = OrderStatus.objects.filter(name="Отменён").first()
+        order.save()
         return redirect('orders')
 
 
@@ -165,6 +207,7 @@ class AddProductToOrderView(View):
 
 class RemoveProductFromOrderView(View):
     def post(self, request, order_item_id):
+        print(order_item_id)
         order_item = get_object_or_404(OrderItem, pk=order_item_id)
         order_item.delete()
         return redirect('orders')
@@ -207,8 +250,23 @@ class CategoryView(ListView):
             return render(request, 'categories.html', {'categories': categories})
         category = get_object_or_404(Category, pk=pk)
         if category.subcategories.count() == 0:
-            return render(request, 'products.html', {'products': category.products.all()})
-        return render(request, 'category.html', {'categories': category.subcategories.all()})
+            return render(request, 'product_list.html', {'products': category.products.all()})
+        return render(request, 'categories.html', {'categories': category.subcategories.all()})
+    
+
+class AddProductToLastOrderView(View):
+    def post(self, request, pk):
+        user = CustomUser.objects.get(id=request.user.id)
+        order = Order.objects.filter(user=user).order_by('-id').first()
+        product = get_object_or_404(Product, pk=pk)
+        OrderItem.objects.create(
+            order=order,
+            product=product
+        )
+        return redirect('orders')
+    
+
+
 
 
 # class ProductUpdateView(UpdateView):
