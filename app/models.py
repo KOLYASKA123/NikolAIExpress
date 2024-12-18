@@ -16,6 +16,7 @@ class Product(models.Model):
     brand = models.ForeignKey('Brand', on_delete=models.CASCADE)
     category = models.ForeignKey('Category', on_delete=models.SET_DEFAULT, blank=True, default=None, related_name='products')
     price = models.FloatField(validators=[MinValueValidator(0.01)])
+    quantity = models.IntegerField(validators=[MinValueValidator(0)], default=0)
 
     class Meta:
         ordering = ['-date_created']
@@ -133,3 +134,20 @@ class CartItem(models.Model):
 
     def __str__(self):
         return f"{self.product.name} в корзине"
+    
+
+class Post(models.Model):
+    id = models.AutoField(primary_key=True)
+    title = models.CharField(max_length=100)
+    text = models.TextField()
+    preview_image = models.FileField(upload_to='images/', null=True, blank=True)
+    date_created = models.DateTimeField(default=timezone.now)
+    date_updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'Пост'
+        verbose_name_plural = 'Посты'
+        ordering = ['-date_created']
+
+    def __str__(self):
+        return self.title

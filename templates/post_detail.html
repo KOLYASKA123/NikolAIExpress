@@ -1,0 +1,26 @@
+{% extends "index.html" %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href={% static 'styles/css/site.css' %}>
+    <link rel="stylesheet" href={% static 'styles/css/forms.css' %}>
+{% endblock head %}
+
+{% block content %}
+    <div class="form-container">
+        {% if post.preview_image %}
+            <div style="text-align: center">
+                <img style="width: 100%; border-radius: 15px;" src="{{ post.preview_image.url }}" alt="post.preview_image">
+            </div>
+            <br>
+        {% endif %}
+        <div class="form-group">
+            <h1>{{ post.title }}</h1>
+        </div>
+        <br>
+        <br>
+        <div class="form-group">
+            <p>{{ post.text}}</p>
+        </div>
+        
+    </div>
+{% endblock %}

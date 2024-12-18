@@ -1,0 +1,36 @@
+{% extends "index.html" %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href={% static 'styles/css/site.css' %}>
+    <link rel="stylesheet" href={% static 'styles/css/forms.css' %}>
+{% endblock head %}
+
+{% block content %}
+    <div class="form-container">
+        <h1>Создать пост</h1><br> 
+        {% if post.preview_image %}
+            <div style="text-align: center">
+                <img style="width: 50%; border-radius: 15px;" src="{{ post.preview_image.url }}" alt="post.preview_image">
+            </div>
+            <br>
+        {% endif %}
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-group">
+                {{field}}
+                {% if field.errors %}
+                    <ul class="errors">
+                        {% for error in field.errors %}
+                            <li>
+                                {{error}}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            {% endfor %}
+            <input id="send-button" type="submit" value="Сохранить">
+        </form>
+    </div>
+{% endblock %}

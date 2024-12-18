@@ -173,3 +173,28 @@ li > a > img {
     margin-bottom: 100px;
     text-decoration: none;
 }
+
+/* styles/css/site.css */
+
+.create-post-button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.create-post-button {
+    padding: 10px 20px;
+    background-color: #343434;
+    color: lime;
+    border: none;
+    border-radius: 15px;
+    text-decoration: none;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.create-post-button:hover {
+    background-color: #414141;
+}
+

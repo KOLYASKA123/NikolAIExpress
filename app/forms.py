@@ -1,5 +1,5 @@
 from django import forms
-from .models import Review, Product, Category, Brand
+from .models import Post, Product, Category, Brand
 
 
 class FeedbackForm(forms.Form):
@@ -164,3 +164,14 @@ class ProductFilterForm(forms.Form):
         required=False,
         widget=forms.Select(attrs={'class': 'form-control'})
     )
+
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ('title', 'text', 'preview_image')
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Заголовок'}),
+            'text': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Текст поста'}),
+            'preview_image': forms.ClearableFileInput(attrs={'class': 'form-control', 'placeholder': 'Изображение'})
+        }

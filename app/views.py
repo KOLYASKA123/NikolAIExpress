@@ -3,8 +3,8 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic import View, ListView, DetailView, CreateView, DeleteView, UpdateView
 
 from accounts.models import CustomUser
-from .forms import FeedbackForm, ProductFilterForm, ProductReviewForm, ProductForm
-from .models import CartItem, Category, Order, OrderItem, OrderStatus, Product, Review
+from .forms import FeedbackForm, PostForm, ProductFilterForm, ProductReviewForm, ProductForm
+from .models import CartItem, Category, Order, OrderItem, OrderStatus, Post, Product, Review
 from django.utils import timezone
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 # Create your views here.
@@ -266,17 +266,46 @@ class AddProductToLastOrderView(View):
         return redirect('orders')
     
 
+class NewsListView(ListView):
+    model = Post
+    template_name = 'news.html'
+    context_object_name = 'news'
 
 
+class NewsDeleteView(View):
+    def post(self, request, pk):
+        post = get_object_or_404(Post, pk=pk)
+        post.delete()
+        return redirect('news')
+    
 
-# class ProductUpdateView(UpdateView):
-#     model = Products
-#     template_name = 'product_form.html'
-#     fields = '__all__'
-#     success_url = '/products/'
-#
-#
-# class ProductDeleteView(DeleteView):
-#     model = Products
-#     template_name = 'product_form.html'
-#     success_url = '/products/'
+class NewsUpdateView(View):
+    def get(self, request, pk):
+        post = get_object_or_404(Post, pk=pk)
+        form = PostForm(instance=post)
+        return render(request, 'news_form.html', {'form': form, 'post': post})
+    
+    def post(self, request, pk):
+        post = get_object_or_404(Post, pk=pk)
+        form = PostForm(request.POST, request.FILES, instance=post)
+        if form.is_valid():
+            form.save()
+        return redirect('news')
+
+class NewsDetailView(View):
+
+    def get(self, request, pk):
+        post = get_object_or_404(Post, pk=pk)
+        return render(request, 'post_detail.html', {'post': post})
+    
+
+class NewsCreateView(View):
+    def get(self, request):
+        form = PostForm()
+        return render(request, 'news_form.html', {'form': form})
+    
+    def post(self, request):
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+        return redirect('news')

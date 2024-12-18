@@ -30,4 +30,10 @@ urlpatterns = [
 
     path('partners/', lambda request: render(request, 'links.html'), name='partners'),
     path('feedback/', views.GlobalFeedbackView.as_view(), name='feedback'),
+
+    path('news/', views.NewsListView.as_view(), name='news'),
+    path('news/<int:pk>', views.NewsDetailView.as_view(), name='news_detail'),
+    path('news/create', views.NewsCreateView.as_view(), name='create_post'),
+    path('news/<int:pk>/update', views.NewsUpdateView.as_view(), name='update_post'),
+    path('news/<int:pk>/delete', views.NewsDeleteView.as_view(), name='delete_post'),
 ]

@@ -1,0 +1,39 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block head %}
+	<title>Товары</title>
+    <link rel="stylesheet" href={% static 'styles/css/site.css' %}>
+    <link rel="stylesheet" href={% static 'styles/css/product_list.css' %}>
+{% endblock %}
+{% block content %}
+    <div id="cards-container">
+	    {% for post in news %}
+            <a class="blink" href={% url 'news_detail' post.id %}>
+	    	    <div class="card">
+                    {% if post.preview_image %}
+                        <div style="text-align: center">
+                            <img style="width: 50%; border-radius: 15px;" src="{{ post.preview_image.url }}" alt="post.preview_image">
+                        </div>
+                    {% else %}
+                        <div>Нет картинки</div>
+                    {% endif %}
+                    <div style="text-align: center;">{{post.title}}</div>
+                    {% if user.is_staff %}
+                    <a href={% url 'update_post' post.id %}>Обновить пост</a><br>
+                    <form method="post" action="{% url 'delete_post' post.id %}">
+                        {% csrf_token %}
+                        <input type="submit" value="Удалить пост">
+                    </form>
+                    
+                    {% endif %}
+                </div>
+            </a>
+	    {% empty %}
+	    	<p>Нет новостей</p>
+	    {% endfor %}
+    </div>
+    <br><br>
+    <div style="text-align: center;">
+        <a class="create-post-button" href="{% url 'create_post' %}">Создать пост</a>
+    </div>
+{% endblock %}
